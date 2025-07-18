@@ -1,0 +1,59 @@
+✅ 1. EXEC bronze.load_bronze;
+What it does: Executes the stored procedure named load_bronze from the bronze schema.
+Think of it like clicking a “Run ETL” button — it starts the whole load process.
+
+✅ 2. CREATE OR ALTER PROCEDURE
+Used to create a new stored procedure or update an existing one without error.
+Safer than CREATE PROCEDURE alone, especially during development.
+
+✅ 3. BEGIN TRY / BEGIN CATCH
+Implements error handling in SQL Server.
+Code inside TRY runs normally.
+If any error occurs, control jumps to the CATCH block, which logs the error.
+Helps prevent job failures from crashing your ETL pipeline.
+
+✅ 4. DECLARE @start_time DATETIME
+Declares local variables to track start/end time of each table load.
+Used for performance tracking (how long each step takes).
+
+✅ 5. GETDATE()
+Built-in function that returns the current date and time.
+Used here to timestamp each step and calculate durations.
+
+✅ 6. PRINT
+Sends messages to the SQL Server output window (e.g., SSMS Messages tab).
+Helps you log progress and debug where failures happen.
+
+✅ 7. TRUNCATE TABLE
+Removes all rows from a table quickly and efficiently.
+Unlike DELETE, it doesn’t log individual row deletions (faster) and resets identity columns.
+⚠️ Cannot be used if there are foreign key constraints.
+
+✅ 8. BULK INSERT
+Loads data from a CSV file directly into a SQL table.
+Very fast for large data loads.
+Key options used:
+    FIRSTROW = 2: Skip the header row in the CSV.
+    FIELDTERMINATOR = ',': CSV delimiter.
+    TABLOCK: Applies a bulk update lock for performance.
+⚠️ Ensure the file path is accessible from the SQL Server machine — local paths like C:\... only work if the server has access.
+
+✅ 9. DATEDIFF(second, @start_time, @end_time)
+Calculates the time duration (in seconds) taken for each load step.
+Helps in performance monitoring.
+
+✅ 10. CAST(... AS NVARCHAR)
+Converts numbers/dates to text format so they can be printed with messages.
+
+✅ 11. File Paths (e.g., 'C:\sql-data-warehouse-project\datasets\...')
+These are absolute file paths for CSV files on the local system where SQL Server is running.
+Needs to be replaced or mapped correctly in production or cloud setups (e.g., Azure Blob Storage, network drives).
+
+✅ 12. Schema Notation (e.g., bronze.crm_cust_info)
+SQL Server supports schemas as namespaces.
+bronze, silver, gold are schema names used to logically separate layers of the data warehouse.
+
+✅ 13. Comments Block (""" ... """)
+In your version, this appears to mimic a comment, but triple quotes (""") are not valid in T-SQL.
+
+✅ Instead, use -- single-line comment or /* multi-line comment */ in T-SQL.
